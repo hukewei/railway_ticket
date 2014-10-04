@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<head>
+	<meta charset="utf-8">
+	<title>Recherche un trajet</title>
+	<link rel="stylesheet" href="development-bundle/themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="css/jquery.timepicker.css">
+	<link href="http://fonts.googleapis.com/css?family=Oxygen:400,700,300" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<script src="development-bundle/jquery-1.9.1.js"></script>		
+	<script src="js/jquery.cookie.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/jquery.timepicker.js"></script>
+	<script src="development-bundle/ui/jquery.ui.core.js"></script>
+	<script src="development-bundle/ui/jquery.ui.widget.js"></script>
+	<script src="development-bundle/ui/jquery.ui.datepicker.js"></script>
+	<script>
+	$(function() {
+		var gare_depart = $.cookie('gare_depart');
+		var gare_arrivee = $.cookie('gare_arrivee');
+		$('#gare_depart').html("<h3>"+gare_depart+"</h3>");
+		$('#gare_arrivee').html("<h3>"+gare_arrivee+"</h3>");
+		$('#timepicker').timepicker({ 'scrollDefaultNow': true ,
+			'timeFormat': 'H:i:s'});
+		$( "#datepicker" ).datepicker({ minDate: 0, maxDate: "+12M" });
+				$( "#datepicker" ).datepicker( "option", "dateFormat", "yymmdd" );
+	});
+	</script>
+</head>
+	</head>
+	<body>
+		<div id="wrapper">
+	<div id="menu-wrapper">
+		<div id="menu" class="container">
+			<ul>
+				<li class="current_page_item"><a href="index.html">Homepage</a></li>
+				<li><a href="recherche.html">Rechercher un trajet</a></li>
+				<li><a href="gerer_billets.html">Gérer vos billets</a></li>
+			</ul>
+		</div>
+	</div>
+		<div id="form" >
+			Nom du Gare depart: <div id="gare_depart"></div>
+			Nom du Gare arrivee: <div id="gare_arrivee"></div>
+		</div>
+		<form action="rechercher2_changer.php" method="POST" class="login_label">
+		
+		<div id="result"></div>
+			Date de depart: <input type="text" name="date" id="datepicker"/><br/>
+			Heure de depart: <input type="text" name="heure" id="timepicker"/><br/>
+			<input type="submit" value="valide" class="button">
+		</form>
+
+	</body>
+</html>

@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>gerer votre billet</title>
+		<meta charset="utf-8">
+		<link href="http://fonts.googleapis.com/css?family=Oxygen:400,700,300" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+		<script src="js/jquery-1.9.1.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script>
+		$(document).ready(function(){
+			document.getElementById("valide").style.visibility="hidden";
+			$('#modifier').click(function() {
+   				if($('#modifier').is(':checked')) 
+   				{ 
+   					if (assurance == "f")
+   					{
+   						$('#modifier').attr('checked',false);
+  						alert("Vous n'avez pas de droit de modifier un billet");
+  					}
+  					else{
+  						var r=confirm("Vous voulez vraiment changer votre billet?");
+  						if (r==true) 
+						{ 
+							$('form').attr('action',"changer_date_billet.html");
+							document.getElementById("valide").style.visibility="visible";
+						}
+						else
+						{
+							$('#modifier').attr('checked',false);
+						}
+  					} 
+  				}
+			});
+			$('#annule').click(function() {
+				var r=confirm("Vous voulez vraiment annuler votre billet?"); 
+				if (r==true) 
+				{ 
+					$('form').attr('action',"annuler_billet.php");
+					document.getElementById("valide").style.visibility="visible";
+				}
+				else
+				{
+					$('#annule').attr('checked',false);
+				}
+			});
+			var billet = $.cookie('billet');
+			var date_dep = $.cookie('date_dep');
+			var heure = $.cookie('heure');
+			var gare_depart = $.cookie('gare_depart');
+			var gare_arrivee = $.cookie('gare_arrivee');
+  			var assurance = $.cookie('assurance');
+  			$("#info_avant").html("Numero de billet : "+billet+"<br/>Gare Depart: "+gare_depart+"<br/>Gare Arrivee : "+gare_arrivee+"<br/>Date Depart : "+date_dep+"<br/>Heure Depart : "+heure);
+  			
+		});
+		
+		</script>
+	</head>
+	<body>
+			<div id="wrapper">
+	<div id="menu-wrapper">
+		<div id="menu" class="container">
+			<ul>
+				<li class="current_page_item"><a href="./">Homepage</a></li>
+				<li><a href="recherche.html">Rechercher un trajet</a></li>
+				<li><a href="gerer_billets.html">Gérer vos billets</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="page">
+		<hr>
+		<div id="info_avant"></div>
+		<form action="annuler_billet.php" method="POST">
+			<div id="info"></div>
+			<hr>
+			Mode de gestion :
+			<input type="radio" name="mode" value="modifier" id ="modifier">Modifier
+			<input type="radio" name="mode" value="annuler" id = "annule">Annuler<br/>
+			<font size=5><div id = 'valide'>Cliquez Valide Pour continuer:<br/><input type="submit" value="valide" id = "valide"></div></font>
+			
+		</form>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>achat de billet</title>
+		<meta charset="utf-8">
+		<link href="http://fonts.googleapis.com/css?family=Oxygen:400,700,300" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+		<script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script>
+		$(document).ready(function(){
+			var prix = $.cookie('prix');
+			var date_dep = $.cookie('date_dep');
+			var heure = $.cookie('heure');
+			var gare_depart = $.cookie('gare_depart');
+			var gare_arrivee = $.cookie('gare_arrivee');
+			var assu = 0;
+			$('#assurance').click(function() {
+					if($(this).is(':checked')){
+						assu = 1;
+						$("#prix").html("Prix Final : "+(prix*1+assu)+" €");
+					}
+				});
+			$('#noassurance').click(function() {
+				if($(this).is(':checked')){
+						assu = 0;
+						$("#prix").html("Prix Final : "+(prix*1+assu)+" €");
+					}
+				});
+  			$("#info").html("<table border='1' width='200' class = 'table'><tr><td>Date</td><td>Heure</td><td>Gare Depart</td><td>Gare Arrivee</td><td>Prix</td></tr><tr><td>"+date_dep+ "</td><td>"+heure+ "</td><td>"+ gare_depart + "</td><td>"+ gare_arrivee + "</td><td>"+ prix +" €</td></tr></table>");
+  			$('#mode').change(function() {
+  				if ($(this).attr('value')=='Internet'){
+  					$("#prix").html("Prix Final : "+(prix*0.9+assu)+" €");
+  				}
+  				else {
+  					$("#prix").html("Prix Final : "+(prix*1+assu)+" €");
+  				}
+			});
+				
+		});
+		
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+		<div id="menu-wrapper">
+			<div id="menu" class="container">
+				<ul>
+					<li class="current_page_item"><a href="./">Homepage</a></li>
+					<li><a href="recherche.html">Rechercher un trajet</a></li>
+					<li><a href="gerer_billets.html">Gérer vos billets</a></li>
+				</ul>
+			</div>
+		</div>
+		<form action="ajouter_billet.php" method="POST" class="login_label">
+			<div id="info"></div>
+			Nom :<input type="text" name="nom"><br/>
+			Prenom :<input type="text" name="prenom"><br/>
+			Telephone :<input type="text" name="telephone"><br/>
+			Assurance : <input type="radio" name="assu" value="TRUE" id="assurance">Oui
+			<input type="radio" name="assu" value="FALSE" id="noassurance">Nom<br/>
+			Paiement : <select name="paiement">
+				<option value="CB">Carte Blue</option>
+				<option value="Espèce">Espèce</option>
+				<option value="Chèque">Chèque</option>
+				<option value="Monéo">Monéo</option>
+				<option value="Paypal">Paypal</option>
+				<option value="Western Union">Western Union</option>
+				<option value="Virement">Virement</option>
+			</select><br/>
+			Mode : <select name="mode" id="mode">
+				<option value="">Choisissez ... </option>
+				<option value="Internet">Internet - 10% off</option>
+				<option value="Billeterie">Billeterie</option>
+			</select><br/>
+			<font size=5><div id="prix" ></div></font>
+			<input type="submit" value="valide" class="button">
+		</form>
+	</body>
+</html>

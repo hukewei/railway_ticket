@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<head>
+	<meta charset="utf-8">
+	<title>Recherche un trajet</title>
+	<link rel="stylesheet" href="development-bundle/themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="css/jquery.timepicker.css">
+	<link href="http://fonts.googleapis.com/css?family=Oxygen:400,700,300" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<script src="development-bundle/jquery-1.9.1.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/jquery.timepicker.js"></script>
+	<script src="development-bundle/ui/jquery.ui.core.js"></script>
+	<script src="development-bundle/ui/jquery.ui.widget.js"></script>
+	<script src="development-bundle/ui/jquery.ui.datepicker.js"></script>
+	<script type="text/javascript">
+	function displayData(zone_saisie, zone_resultat, connexion_type){
+		document.getElementById(zone_resultat).innerHTML="";
+		getListOfGares(zone_saisie, zone_resultat, connexion_type);
+
+	}
+
+	function display(xml, zone_saisie,zone_resultat){
+
+		var str = '';
+		var gare_name = new Array();
+		for (i=0 ; i<xml.getElementsByTagName('gare').length ; i++)
+		{
+			var gare = xml.getElementsByTagName('gare')[i];
+			var nom = gare.getElementsByTagName('name')[0].firstChild.nodeValue.toUpperCase();
+			gare_name[i] = nom; 	
+			//str +=  nom + '<br />';
+		}
+		$("#"+zone_saisie).autocomplete({
+      			source: gare_name
+    		});
+
+		//document.getElementById(zone_resultat).innerHTML+=str;
+	}
+
+	function getListOfGares(zone_saisie, zone_resultat, connexion_type){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+		    display(xhr.responseXML, zone_saisie,zone_resultat);
+		}
+		};
+
+		var adresse = "http://tuxa.sme.utc/~nf17p001/site/client/xml.php";
+
+		if (connexion_type=="GET") {
+			var arg = "?debutnom="+encodeURIComponent(document.getElementById(zone_saisie).value);
+			xhr.open("GET", adresse+arg, true);
+		    xhr.send(null);
+		}
+		if (connexion_type=="POST"){
+			xhr.open("POST", adresse, true);
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			xhr.send("debutnom="+document.getElementById(zone_saisie).value);
+		}
+	}
+	</script>
+	<script>
+	$(function() {
+		$('#timepicker').timepicker({ 'scrollDefaultNow': true ,
+			'timeFormat': 'H:i:s'});
+		$( "#datepicker" ).datepicker({ minDate: 0, maxDate: "+12M" });
+				$( "#datepicker" ).datepicker( "option", "dateFormat", "yymmdd" );
+	});
+	</script>
+</head>
+	</head>
+	<body>
+		<div id="wrapper">
+	<div id="menu-wrapper">
+		<div id="menu" class="container">
+			<ul>
+				<li class="current_page_item"><a href="index.html">Homepage</a></li>
+				<li><a href="recherche.html">Rechercher un trajet</a></li>
+				<li><a href="gerer_billets.html">Gérer vos billets</a></li>
+			</ul>
+		</div>
+	</div>
+		<form action="rechercher2.php" method="POST" class="login_label">
+			<h3>Choisisez votre trajet :</h3>
+			Nom du Gare depart: <input type="text" name="nomgare_depart" id="nomgare_depart" onKeyUp="displayData('nomgare_depart', 'result', 'POST');"/><br/>
+			Nom du Gare arrivee: <input type="text" name="nomgare_arrivee" id="nomgare_arrivee"onKeyUp="displayData('nomgare_arrivee', 'result', 'POST');" />
+		<div id="result"></div>
+			Date de depart: <input type="text" name="date" id="datepicker"/><br/>
+			Heure de depart: <input type="text" name="heure" id="timepicker"/><br/>
+			<input type="submit" value="valide" class="button">
+		</form>
+	</body>
+</html>
